@@ -1,12 +1,12 @@
 const { getTokenUser } = require('./models');
 
-function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
   const auth = req.headers.authorization;
   if (!auth || !auth.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Missing or invalid authorization header' });
   }
   const token = auth.split(' ')[1];
-  const user = getTokenUser(token);
+  const user = await getTokenUser(token);
   if (!user || user.status !== 'active') {
     return res.status(401).json({ error: 'Invalid token or user inactive' });
   }

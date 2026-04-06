@@ -1,99 +1,28 @@
-const fs = require('fs');
-const path = require('path');
 const { v4: uuidv4 } = require('uuid');
+const supabase = require('./supabase');
 
-const DB_PATH = path.join(__dirname, 'data.json');
+// ── Users ──────────────────────────────────────────────────────────────────
 
-const defaultData = {
-  users: [
-    {
-      id: 'admin-001',
-      name: 'System Administrator',
-      email: 'admin@zorvyn.com',
-      password: 'admin123',
-      role: 'admin',
-      status: 'active',
-      phone: '+1-555-0101',
-      company: 'Zorvyn Finance Corp',
-      address: '123 Admin Street, Tech City, TC 12345',
-      department: 'IT Administration',
-      joinDate: '2024-01-01'
-    },
-    {
-      id: 'owner-001',
-      name: 'Business Owner',
-      email: 'owner@zorvyn.com',
-      password: 'owner123',
-      role: 'owner',
-      status: 'active',
-      phone: '+1-555-0102',
-      company: 'Zorvyn Enterprises',
-      address: '456 Owner Avenue, Business City, BC 67890',
-      department: 'Executive Management',
-      joinDate: '2024-01-15'
-    },
-    {
-      id: 'viewer-001',
-      name: 'Data Viewer',
-      email: 'viewer@zorvyn.com',
-      password: 'viewer123',
-      role: 'viewer',
-      status: 'active',
-      phone: '+1-555-0103',
-      company: 'Zorvyn Analytics',
-      address: '789 Viewer Blvd, Data City, DC 54321',
-      department: 'Data Analysis',
-      joinDate: '2024-02-01'
-    }
-  ],
-  records: [],
-  tokens: {}
-};
-
-let store = JSON.parse(JSON.stringify(defaultData));
-
-function loadData() {
-  if (fs.existsSync(DB_PATH)) {
-    try {
-      const raw = fs.readFileSync(DB_PATH, 'utf-8');
-      store = JSON.parse(raw);
-    } catch (err) {
-      console.error('Failed reading data file: - models.js:25', err);
-      store = JSON.parse(JSON.stringify(defaultData));
-    }
-  } else {
-    saveData();
-  }
+async function getAllUsers() {
+  const { data, error } = await supabase.from('users').select('*');
+  if (error) throw error;
+  return data;
 }
 
-const isReadOnlyStore = process.env.VERCEL === '1';
-
-function saveData() {
-  if (isReadOnlyStore) return;
-  fs.writeFileSync(DB_PATH, JSON.stringify(store, null, 2), 'utf-8');
+async function getUserById(id) {
+  const { data, error } = await supabase.from('users').select('*').eq('id', id).single();
+  if (error) return null;
+  return data;
 }
 
-function getAllUsers() {
-  return [...store.users];
+async function getUserByEmail(email) {
+  const { data, error } = await supabase.from('users').select('*').ilike('email', email).single();
+  if (error) return null;
+  return data;
 }
 
-function getUserById(id) {
-  return store.users.find((u) => u.id === id);
-}
-
-function getUserByEmail(email) {
-  return store.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-}
-
-function createUser({ name, email, password, role = 'viewer', status = 'active', phone, company, address, department }) {
-  if (!name || !email || !password) {
-    throw new Error('Missing required user fields');
-  }
-  if (getUserByEmail(email)) {
-    const err = new Error('Email address already in use');
-    err.code = 'DUPLICATE_EMAIL';
-    throw err;
-  }
+async function createUser({ name, email, password, role = 'viewer', status = 'active', phone, company, address, department }) {
+  if (!name || !email || !password) throw new Error('Missing required user fields');
   const user = {
     id: uuidv4(),
     name,
@@ -105,33 +34,37 @@ function createUser({ name, email, password, role = 'viewer', status = 'active',
     company: company || '',
     address: address || '',
     department: department || '',
-    joinDate: new Date().toISOString().split('T')[0]
+    join_date: new Date().toISOString().split('T')[0]
   };
-  store.users.push(user);
-  saveData();
-  return user;
+  const { data, error } = await supabase.from('users').insert(user).select().single();
+  if (error) {
+    if (error.code === '23505') {
+      const err = new Error('Email address already in use');
+      err.code = 'DUPLICATE_EMAIL';
+      throw err;
+    }
+    throw error;
+  }
+  return data;
 }
 
-function updateUser(id, changes) {
-  const user = getUserById(id);
-  if (!user) return null;
+async function updateUser(id, changes) {
   const allowed = ['name', 'email', 'role', 'status', 'password', 'phone', 'company', 'address', 'department'];
-  allowed.forEach((field) => {
-    if (changes[field] !== undefined) user[field] = changes[field];
-  });
-  saveData();
-  return user;
+  const update = {};
+  allowed.forEach((f) => { if (changes[f] !== undefined) update[f] = changes[f]; });
+  const { data, error } = await supabase.from('users').update(update).eq('id', id).select().single();
+  if (error) return null;
+  return data;
 }
 
-function deleteUser(id) {
-  const idx = store.users.findIndex((u) => u.id === id);
-  if (idx === -1) return false;
-  store.users.splice(idx, 1);
-  saveData();
-  return true;
+async function deleteUser(id) {
+  const { error } = await supabase.from('users').delete().eq('id', id);
+  return !error;
 }
 
-function createRecord({ amount, type, category, date, notes, createdBy }) {
+// ── Records ────────────────────────────────────────────────────────────────
+
+async function createRecord({ amount, type, category, date, notes, createdBy }) {
   const record = {
     id: uuidv4(),
     amount: Number(amount),
@@ -139,75 +72,88 @@ function createRecord({ amount, type, category, date, notes, createdBy }) {
     category,
     date: date || new Date().toISOString(),
     notes: notes || '',
-    createdBy,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    created_by: createdBy,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
   };
-  store.records.push(record);
-  saveData();
-  return record;
+  const { data, error } = await supabase.from('records').insert(record).select().single();
+  if (error) throw error;
+  return toRecordCamel(data);
 }
 
-function getRecordById(id) {
-  return store.records.find((r) => r.id === id);
+async function getRecordById(id) {
+  const { data, error } = await supabase.from('records').select('*').eq('id', id).single();
+  if (error) return null;
+  return toRecordCamel(data);
 }
 
-function updateRecord(id, changes) {
-  const record = getRecordById(id);
-  if (!record) return null;
+async function updateRecord(id, changes) {
   const allowed = ['amount', 'type', 'category', 'date', 'notes'];
-  allowed.forEach((field) => {
-    if (changes[field] !== undefined) record[field] = changes[field];
-  });
-  record.updatedAt = new Date().toISOString();
-  saveData();
-  return record;
+  const update = { updated_at: new Date().toISOString() };
+  allowed.forEach((f) => { if (changes[f] !== undefined) update[f] = changes[f]; });
+  const { data, error } = await supabase.from('records').update(update).eq('id', id).select().single();
+  if (error) return null;
+  return toRecordCamel(data);
 }
 
-function deleteRecord(id) {
-  const idx = store.records.findIndex((r) => r.id === id);
-  if (idx === -1) return false;
-  store.records.splice(idx, 1);
-  saveData();
-  return true;
+async function deleteRecord(id) {
+  const { error } = await supabase.from('records').delete().eq('id', id);
+  return !error;
 }
 
-function filterRecords({ type, category, startDate, endDate }) {
-  return store.records.filter((rec) => {
-    let ok = true;
-    if (type) ok = ok && rec.type === type;
-    if (category) ok = ok && rec.category === category;
-    if (startDate) ok = ok && new Date(rec.date) >= new Date(startDate);
-    if (endDate) ok = ok && new Date(rec.date) <= new Date(endDate);
-    return ok;
-  });
+async function filterRecords({ type, category, startDate, endDate }) {
+  let query = supabase.from('records').select('*');
+  if (type) query = query.eq('type', type);
+  if (category) query = query.eq('category', category);
+  if (startDate) query = query.gte('date', startDate);
+  if (endDate) query = query.lte('date', endDate);
+  const { data, error } = await query;
+  if (error) throw error;
+  return data.map(toRecordCamel);
 }
+
+async function getRecords() {
+  const { data, error } = await supabase.from('records').select('*');
+  if (error) throw error;
+  return data.map(toRecordCamel);
+}
+
+// Map snake_case DB columns → camelCase used in app
+function toRecordCamel(r) {
+  return {
+    id: r.id,
+    amount: r.amount,
+    type: r.type,
+    category: r.category,
+    date: r.date,
+    notes: r.notes,
+    createdBy: r.created_by,
+    createdAt: r.created_at,
+    updatedAt: r.updated_at
+  };
+}
+
+// ── Tokens ─────────────────────────────────────────────────────────────────
 
 function createToken(userId) {
   const payload = `${userId}:${Date.now()}:${uuidv4()}`;
   return Buffer.from(payload).toString('base64');
 }
 
-function getTokenUser(token) {
+async function getTokenUser(token) {
   try {
     const decoded = Buffer.from(token, 'base64').toString('utf-8');
     const [userId] = decoded.split(':');
-    return getUserById(userId);
-  } catch (err) {
+    return await getUserById(userId);
+  } catch {
     return null;
   }
 }
 
-function getUserIdFromToken(token) {
-  const user = getTokenUser(token);
+async function getUserIdFromToken(token) {
+  const user = await getTokenUser(token);
   return user ? user.id : null;
 }
-
-function getRecords() {
-  return [...store.records];
-}
-
-loadData();
 
 module.exports = {
   getAllUsers,
