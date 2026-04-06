@@ -1,0 +1,665 @@
+/* Background Animation Styles */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* Floating Geometric Shapes */
+.shape {
+  position: absolute;
+  opacity: 0.15;
+  animation: float 20s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+
+.shape-1 {
+  top: 10%;
+  left: 10%;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+  border-radius: 50%;
+  animation-delay: 0s;
+  animation-duration: 25s;
+}
+
+.shape-2 {
+  top: 20%;
+  right: 15%;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(45deg, #a8e6cf, #ffd3a5, #ffaaa5, #dcedc8);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  animation-delay: 5s;
+  animation-duration: 30s;
+}
+
+.shape-3 {
+  bottom: 25%;
+  left: 20%;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+  border-radius: 20px;
+  animation-delay: 10s;
+  animation-duration: 35s;
+}
+
+.shape-4 {
+  top: 60%;
+  right: 25%;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(45deg, #ffecd2, #fcb69f, #ff9a9e, #fecfef);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  animation-delay: 15s;
+  animation-duration: 28s;
+}
+
+.shape-5 {
+  bottom: 10%;
+  right: 10%;
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(45deg, #a8edea, #fed6e3, #d299c2, #fef9d7);
+  border-radius: 15px;
+  animation-delay: 20s;
+  animation-duration: 32s;
+}
+
+.shape-6 {
+  top: 40%;
+  left: 60%;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef, #ffecd2);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  animation-delay: 25s;
+  animation-duration: 27s;
+}
+
+/* Floating Particles */
+.particle {
+  position: absolute;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border-radius: 50%;
+  animation: drift 15s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+.particle-1 {
+  top: 15%;
+  left: 5%;
+  width: 8px;
+  height: 8px;
+  animation-delay: 0s;
+  animation-duration: 18s;
+}
+
+.particle-2 {
+  top: 35%;
+  right: 8%;
+  width: 6px;
+  height: 6px;
+  animation-delay: 3s;
+  animation-duration: 22s;
+}
+
+.particle-3 {
+  bottom: 30%;
+  left: 15%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 6s;
+  animation-duration: 20s;
+}
+
+.particle-4 {
+  top: 70%;
+  right: 20%;
+  width: 7px;
+  height: 7px;
+  animation-delay: 9s;
+  animation-duration: 25s;
+}
+
+.particle-5 {
+  bottom: 15%;
+  left: 70%;
+  width: 9px;
+  height: 9px;
+  animation-delay: 12s;
+  animation-duration: 19s;
+}
+
+/* Floating Bubbles */
+.bubble {
+  position: absolute;
+  background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, rgba(78, 205, 196, 0.1) 50%, transparent 100%);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  border-radius: 50%;
+  animation: bubbleFloat 12s ease-in-out infinite;
+}
+
+.bubble-1 {
+  bottom: 20%;
+  left: 25%;
+  width: 120px;
+  height: 120px;
+  animation-delay: 0s;
+  animation-duration: 15s;
+}
+
+.bubble-2 {
+  top: 25%;
+  right: 30%;
+  width: 80px;
+  height: 80px;
+  animation-delay: 4s;
+  animation-duration: 18s;
+}
+
+.bubble-3 {
+  bottom: 40%;
+  right: 5%;
+  width: 100px;
+  height: 100px;
+  animation-delay: 8s;
+  animation-duration: 16s;
+}
+
+.bubble-4 {
+  top: 50%;
+  left: 40%;
+  width: 60px;
+  height: 60px;
+  animation-delay: 12s;
+  animation-duration: 20s;
+}
+
+/* Color-changing Orbs */
+.color-orb {
+  position: absolute;
+  border-radius: 50%;
+  animation: colorShift 8s ease-in-out infinite, orbit 20s linear infinite;
+  box-shadow: 0 0 20px currentColor;
+}
+
+.orb-1 {
+  top: 15%;
+  left: 80%;
+  width: 40px;
+  height: 40px;
+  animation-delay: 0s;
+  animation-duration: 25s, 20s;
+}
+
+.orb-2 {
+  top: 75%;
+  left: 5%;
+  width: 35px;
+  height: 35px;
+  animation-delay: 3s;
+  animation-duration: 22s, 18s;
+}
+
+.orb-3 {
+  top: 45%;
+  right: 5%;
+  width: 45px;
+  height: 45px;
+  animation-delay: 6s;
+  animation-duration: 28s, 24s;
+}
+
+.orb-4 {
+  bottom: 5%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  animation-delay: 9s;
+  animation-duration: 20s, 16s;
+}
+
+/* Rainbow Waves */
+.rainbow-wave {
+  position: absolute;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24, #ff9a9e, #667eea);
+  background-size: 400% 100%;
+  animation: waveFlow 6s ease-in-out infinite, waveMove 15s linear infinite;
+  border-radius: 2px;
+}
+
+.wave-1 {
+  top: 30%;
+  left: 0;
+  width: 200px;
+  animation-delay: 0s;
+}
+
+.wave-2 {
+  top: 60%;
+  right: 0;
+  width: 180px;
+  animation-delay: 2s;
+}
+
+.wave-3 {
+  bottom: 20%;
+  left: 30%;
+  width: 220px;
+  animation-delay: 4s;
+}
+
+/* Pulsing Stars */
+.pulsing-star {
+  position: absolute;
+  background: radial-gradient(circle, #ffd700, #ffed4e, transparent);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: starPulse 3s ease-in-out infinite, starTwinkle 8s ease-in-out infinite;
+}
+
+.star-1 {
+  top: 20%;
+  left: 20%;
+  width: 15px;
+  height: 15px;
+  animation-delay: 0s, 0s;
+}
+
+.star-2 {
+  top: 50%;
+  right: 15%;
+  width: 12px;
+  height: 12px;
+  animation-delay: 1s, 2s;
+}
+
+.star-3 {
+  bottom: 30%;
+  left: 70%;
+  width: 18px;
+  height: 18px;
+  animation-delay: 2s, 4s;
+}
+
+.star-4 {
+  top: 70%;
+  left: 40%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 3s, 6s;
+}
+
+.star-5 {
+  bottom: 10%;
+  right: 40%;
+  width: 14px;
+  height: 14px;
+  animation-delay: 4s, 8s;
+}
+
+/* Colorful Confetti */
+.confetti {
+  position: absolute;
+  animation: confettiFall 8s ease-in-out infinite, confettiSpin 4s linear infinite;
+  opacity: 0.8;
+}
+
+.confetti-1 {
+  top: -10px;
+  left: 10%;
+  width: 8px;
+  height: 20px;
+  background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+  animation-delay: 0s, 0s;
+}
+
+.confetti-2 {
+  top: -10px;
+  left: 30%;
+  width: 6px;
+  height: 18px;
+  background: linear-gradient(45deg, #4ecdc4, #44a08d);
+  animation-delay: 1s, 1s;
+}
+
+.confetti-3 {
+  top: -10px;
+  left: 50%;
+  width: 10px;
+  height: 22px;
+  background: linear-gradient(45deg, #a8e6cf, #ffd3a5);
+  animation-delay: 2s, 2s;
+}
+
+.confetti-4 {
+  top: -10px;
+  left: 70%;
+  width: 7px;
+  height: 16px;
+  background: linear-gradient(45deg, #ffaaa5, #dcedc8);
+  animation-delay: 3s, 3s;
+}
+
+.confetti-5 {
+  top: -10px;
+  left: 90%;
+  width: 9px;
+  height: 24px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  animation-delay: 4s, 4s;
+}
+
+/* Gradient Overlay */
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 107, 107, 0.03) 0%,
+    rgba(78, 205, 196, 0.03) 20%,
+    rgba(69, 183, 209, 0.03) 40%,
+    rgba(249, 202, 36, 0.03) 60%,
+    rgba(255, 154, 158, 0.03) 80%,
+    rgba(102, 126, 234, 0.03) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+}
+}
+
+.particle-2 {
+  top: 35%;
+  right: 8%;
+  width: 6px;
+  height: 6px;
+  animation-delay: 3s;
+  animation-duration: 22s;
+}
+
+.particle-3 {
+  bottom: 30%;
+  left: 15%;
+  width: 10px;
+  height: 10px;
+  animation-delay: 6s;
+  animation-duration: 20s;
+}
+
+.particle-4 {
+  top: 70%;
+  right: 20%;
+  width: 7px;
+  height: 7px;
+  animation-delay: 9s;
+  animation-duration: 25s;
+}
+
+.particle-5 {
+  bottom: 15%;
+  left: 70%;
+  width: 9px;
+  height: 9px;
+  animation-delay: 12s;
+  animation-duration: 19s;
+}
+
+/* Floating Bubbles */
+.bubble {
+  position: absolute;
+  background: radial-gradient(circle, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 70%, transparent 100%);
+  border: 1px solid rgba(52, 152, 219, 0.2);
+  border-radius: 50%;
+  animation: bubbleFloat 12s ease-in-out infinite;
+}
+
+.bubble-1 {
+  bottom: 20%;
+  left: 25%;
+  width: 120px;
+  height: 120px;
+  animation-delay: 0s;
+  animation-duration: 15s;
+}
+
+.bubble-2 {
+  top: 25%;
+  right: 30%;
+  width: 80px;
+  height: 80px;
+  animation-delay: 4s;
+  animation-duration: 18s;
+}
+
+.bubble-3 {
+  bottom: 40%;
+  right: 5%;
+  width: 100px;
+  height: 100px;
+  animation-delay: 8s;
+  animation-duration: 16s;
+}
+
+.bubble-4 {
+  top: 50%;
+  left: 40%;
+  width: 60px;
+  height: 60px;
+  animation-delay: 12s;
+  animation-duration: 20s;
+}
+
+/* Gradient Overlay */
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(52, 152, 219, 0.02) 0%,
+    rgba(46, 204, 113, 0.02) 25%,
+    rgba(243, 156, 18, 0.02) 50%,
+    rgba(231, 76, 60, 0.02) 75%,
+    rgba(52, 152, 219, 0.02) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+}
+
+/* Keyframe Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotate(90deg);
+  }
+  50% {
+    transform: translateY(-40px) rotate(180deg);
+  }
+  75% {
+    transform: translateY(-20px) rotate(270deg);
+  }
+}
+
+@keyframes drift {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  25% {
+    transform: translate(30px, -15px) scale(1.2);
+  }
+  50% {
+    transform: translate(60px, -30px) scale(0.8);
+  }
+  75% {
+    transform: translate(30px, -15px) scale(1.1);
+  }
+}
+
+@keyframes bubbleFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-50px) scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes colorShift {
+  0%, 100% {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: #ff6b6b;
+  }
+  25% {
+    background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    color: #4ecdc4;
+  }
+  50% {
+    background: linear-gradient(45deg, #45b7d1, #f9ca24);
+    color: #45b7d1;
+  }
+  75% {
+    background: linear-gradient(45deg, #f9ca24, #ff9a9e);
+    color: #f9ca24;
+  }
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg) translateX(100px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(100px) rotate(-360deg);
+  }
+}
+
+@keyframes waveFlow {
+  0%, 100% {
+    background-position: 0% 50%;
+    opacity: 0.4;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 0.8;
+  }
+}
+
+@keyframes waveMove {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(calc(100vw + 200px));
+  }
+}
+
+@keyframes starPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+
+@keyframes starTwinkle {
+  0%, 100% {
+    filter: brightness(1) hue-rotate(0deg);
+  }
+  25% {
+    filter: brightness(1.5) hue-rotate(90deg);
+  }
+  50% {
+    filter: brightness(2) hue-rotate(180deg);
+  }
+  75% {
+    filter: brightness(1.5) hue-rotate(270deg);
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes confettiSpin {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .shape {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .bubble {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .particle {
+    width: 5px !important;
+    height: 5px !important;
+  }
+
+  .color-orb {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  .pulsing-star {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .rainbow-wave {
+    width: 120px !important;
+  }
+
+  .confetti {
+    width: 5px !important;
+    height: 12px !important;
+  }
+}

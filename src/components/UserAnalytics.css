@@ -1,0 +1,375 @@
+/* User Analytics Styles */
+.user-analytics {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.user-analytics h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.analytics-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  animation: slideInUp 0.6s ease-out backwards;
+}
+
+.analytics-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.analytics-card h3 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Bar Charts */
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bar-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bar-label {
+  min-width: 120px;
+  font-weight: 600;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.role-icon {
+  font-size: 1.2rem;
+}
+
+.bar-wrapper {
+  flex: 1;
+  height: 40px;
+  background: #f8f9fa;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: width 1.5s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.bar-value {
+  position: relative;
+  z-index: 2;
+}
+
+.dept-bar {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.company-bar {
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+
+/* Recent Joins */
+.recent-joins {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.join-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f8f9ff, #e8f2ff);
+  border-radius: 12px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  animation: slideInLeft 0.5s ease-out backwards;
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.user-role {
+  margin-bottom: 0.25rem;
+}
+
+.role-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.role-badge[data-role="admin"] {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.role-badge[data-role="owner"] {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: white;
+}
+
+.role-badge[data-role="viewer"] {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+}
+
+.join-date {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Statistics Summary */
+.summary-card {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.summary-card h3 {
+  color: white;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* User Table */
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.user-table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e1e5e9;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.user-table th {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.user-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e1e5e9;
+  transition: background-color 0.3s ease;
+}
+
+.user-table tbody tr:hover {
+  background-color: #f8f9ff;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-avatar.small {
+  width: 35px;
+  height: 35px;
+  font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .user-analytics {
+    padding: 1rem;
+  }
+
+  .analytics-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .analytics-card {
+    padding: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bar-label {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .user-table {
+    font-size: 0.85rem;
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .join-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .user-info {
+    text-align: center;
+  }
+
+  .bar-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .bar-wrapper {
+    width: 100%;
+    height: 30px;
+  }
+}
