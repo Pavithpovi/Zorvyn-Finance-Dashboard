@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Login from './components/Login'
-import Dashboard from './components/Dashboard'
+import AdminDashboard from './components/AdminDashboard'
+import OwnerDashboard from './components/OwnerDashboard'
+import ViewerDashboard from './components/ViewerDashboard'
 import Records from './components/Records'
 import Users from './components/Users'
 import UserAnalytics from './components/UserAnalytics'
@@ -10,13 +12,12 @@ import './index.css'
 
 function App() {
   const [user, setUser] = useState(null)
-  const [currentView, setCurrentView] = useState('dashboard')
+  const [currentView, setCurrentView] = useState('home')
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
-      // Verify token with backend
       fetch('/api/auth/me', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
@@ -35,6 +36,7 @@ function App() {
   const handleLogin = (userData, token) => {
     setUser(userData)
     localStorage.setItem('token', token)
+    setCurrentView('home')
   }
 
   const handleViewChange = (view) => {
@@ -48,7 +50,7 @@ function App() {
   const handleLogout = () => {
     setUser(null)
     localStorage.removeItem('token')
-    setCurrentView('dashboard')
+    setCurrentView('home')
   }
 
   if (!user) {
@@ -61,69 +63,57 @@ function App() {
     )
   }
 
+  const renderModule = () => {
+    if (currentView === 'home') {
+      if (user.role === 'admin') return <AdminDashboard user={user} />
+      if (user.role === 'owner') return <OwnerDashboard user={user} />
+      return <ViewerDashboard user={user} />
+    }
+    
+    // Fallback/Legacy views
+    if (currentView === 'records') return <Records user={user} />
+    if (currentView === 'users' && user.role === 'admin') return <Users />
+    if (currentView === 'analytics' && (user.role === 'admin' || user.role === 'owner')) return <UserAnalytics user={user} />
+    
+    return <Dashboard user={user} />
+  }
+
   return (
     <div className="app">
       <BackgroundAnimation />
       <FinancialAnimations />
       <header className="header">
         <h1 style={{ margin: '0', animation: 'slideInLeft 0.5s ease-out' }}>
-          💰 Zorvyn Finance Dashboard
+          💰 Zorvyn {user.role.toUpperCase()}
         </h1>
         <nav className="nav">
           <button 
-            onClick={() => handleViewChange('dashboard')}
-            style={{ 
-              opacity: currentView === 'dashboard' ? 1 : 0.7,
-              fontWeight: currentView === 'dashboard' ? 'bold' : 'normal'
-            }}
+            onClick={() => handleViewChange('home')}
+            className={currentView === 'home' ? 'active' : ''}
           >
-            📊 Dashboard
+            🏠 {user.role === 'admin' ? 'Administration' : user.role === 'owner' ? 'Owner Portal' : 'Viewer Home'}
           </button>
-          <button 
-            onClick={() => handleViewChange('records')}
-            style={{ 
-              opacity: currentView === 'records' ? 1 : 0.7,
-              fontWeight: currentView === 'records' ? 'bold' : 'normal'
-            }}
-          >
-            💰 Records
-          </button>
-          {user.role === 'admin' && (
-            <button 
-              onClick={() => handleViewChange('users')}
-              style={{ 
-                opacity: currentView === 'users' ? 1 : 0.7,
-                fontWeight: currentView === 'users' ? 'bold' : 'normal'
-              }}
-            >
-              👥 Users
-            </button>
-          )}
+          
           {(user.role === 'admin' || user.role === 'owner') && (
             <button 
-              onClick={() => handleViewChange('analytics')}
-              style={{ 
-                opacity: currentView === 'analytics' ? 1 : 0.7,
-                fontWeight: currentView === 'analytics' ? 'bold' : 'normal'
-              }}
+              onClick={() => handleViewChange('records')}
+              className={currentView === 'records' ? 'active' : ''}
             >
-              📈 Analytics
+              📑 Full Records
             </button>
           )}
+
           <button 
             onClick={handleLogout}
             style={{ backgroundColor: '#e74c3c' }}
-            title="Logout"
+            className="logout-btn"
           >
             🚪 Exit
           </button>
         </nav>
       </header>
-      <main className="main" style={{ opacity: isTransitioning ? 0.5 : 1, transition: 'opacity 0.2s ease' }}>
-        {currentView === 'dashboard' && <Dashboard user={user} />}
-        {currentView === 'records' && <Records user={user} />}
-        {currentView === 'users' && user.role === 'admin' && <Users />}
-        {currentView === 'analytics' && (user.role === 'admin' || user.role === 'owner') && <UserAnalytics user={user} />}
+      <main className="main" style={{ opacity: isTransitioning ? 0 : 1, transition: 'opacity 0.2s ease' }}>
+        {renderModule()}
       </main>
     </div>
   )
