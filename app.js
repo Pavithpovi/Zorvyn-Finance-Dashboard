@@ -9,6 +9,17 @@ const summaryRouter = require('./routes/summary');
 const app = express();
 app.use(bodyParser());
 
+// Enable CORS for development
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', process.env.NODE_ENV === 'production' ? undefined : '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // Serve static files from dist in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'dist')));
@@ -18,7 +29,7 @@ app.get('/', (req, res) => {
   res.send({ status: 'ok', service: 'Finance Dashboard Backend' });
 });
 
-app.post('/auth/login', (req, res) => {
+app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
   const user = getUserByEmail(email);
@@ -32,7 +43,7 @@ app.post('/auth/login', (req, res) => {
   return res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, status: user.status } });
 });
 
-app.post('/auth/register', (req, res) => {
+app.post('/api/auth/register', (req, res) => {
   const { name, email, password, role, phone, company, address, department } = req.body;
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'Name, email, and password are required' });
@@ -69,15 +80,15 @@ app.post('/auth/register', (req, res) => {
   }
 });
 
-app.get('/auth/me', authMiddleware, (req, res) => {
+app.get('/api/auth/me', authMiddleware, (req, res) => {
   res.json({ user: { id: req.user.id, name: req.user.name, email: req.user.email, role: req.user.role, status: req.user.status } });
 });
 
-app.get('/users', authMiddleware, requireRole('admin', 'owner'), (req, res) => {
+app.get('/api/users', authMiddleware, requireRole('admin', 'owner'), (req, res) => {
   res.json(getAllUsers().map((u) => ({ ...u, password: undefined })));
 });
 
-app.post('/users', authMiddleware, requireRole('admin'), (req, res) => {
+app.post('/api/users', authMiddleware, requireRole('admin'), (req, res) => {
   const { name, email, role, status, password, phone, company, address, department } = req.body;
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'name,email,password required' });
@@ -106,7 +117,7 @@ app.post('/users', authMiddleware, requireRole('admin'), (req, res) => {
   }
 });
 
-app.put('/users/:id', authMiddleware, requireRole('admin'), (req, res) => {
+app.put('/api/users/:id', authMiddleware, requireRole('admin'), (req, res) => {
   const { id } = req.params;
   const changes = req.body;
   if (changes.role && !['viewer', 'analyst', 'admin'].includes(changes.role)) {
@@ -117,14 +128,14 @@ app.put('/users/:id', authMiddleware, requireRole('admin'), (req, res) => {
   res.json({ ...user, password: undefined });
 });
 
-app.delete('/users/:id', authMiddleware, requireRole('admin'), (req, res) => {
+app.delete('/api/users/:id', authMiddleware, requireRole('admin'), (req, res) => {
   const success = deleteUser(req.params.id);
   if (!success) return res.status(404).json({ error: 'User not found' });
   res.status(204).send();
 });
 
-app.use('/records', authMiddleware, recordRouter);
-app.use('/summary', authMiddleware, summaryRouter);
+app.use('/api/records', authMiddleware, recordRouter);
+app.use('/api/summary', authMiddleware, summaryRouter);
 
 // Serve React app for any unmatched routes in production
 if (process.env.NODE_ENV === 'production') {
