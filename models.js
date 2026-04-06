@@ -66,7 +66,10 @@ function loadData() {
   }
 }
 
+const isReadOnlyStore = process.env.VERCEL === '1';
+
 function saveData() {
+  if (isReadOnlyStore) return;
   fs.writeFileSync(DB_PATH, JSON.stringify(store, null, 2), 'utf-8');
 }
 
@@ -181,16 +184,23 @@ function filterRecords({ type, category, startDate, endDate }) {
 }
 
 function createToken(userId) {
-  const token = uuidv4();
-  store.tokens[token] = { userId, createdAt: new Date().toISOString() };
-  saveData();
-  return token;
+  const payload = `${userId}:${Date.now()}:${uuidv4()}`;
+  return Buffer.from(payload).toString('base64');
 }
 
 function getTokenUser(token) {
-  const entry = store.tokens[token];
-  if (!entry) return null;
-  return getUserById(entry.userId);
+  try {
+    const decoded = Buffer.from(token, 'base64').toString('utf-8');
+    const [userId] = decoded.split(':');
+    return getUserById(userId);
+  } catch (err) {
+    return null;
+  }
+}
+
+function getUserIdFromToken(token) {
+  const user = getTokenUser(token);
+  return user ? user.id : null;
 }
 
 function getRecords() {
@@ -213,5 +223,6 @@ module.exports = {
   filterRecords,
   getRecords,
   createToken,
-  getTokenUser
+  getTokenUser,
+  getUserIdFromToken
 };
