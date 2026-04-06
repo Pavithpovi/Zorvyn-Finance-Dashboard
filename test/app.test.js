@@ -15,7 +15,7 @@ describe('Finance Dashboard API', () => {
   let viewerToken;
 
   test('Admin login works', async () => {
-    const res = await request(app).post('/auth/login').send({ email: 'admin@example.com', password: 'admin123' });
+    const res = await request(app).post('/api/auth/login').send({ email: 'admin@example.com', password: 'admin123' });
     expect(res.statusCode).toBe(200);
     expect(res.body.token).toBeDefined();
     expect(res.body.user.role).toBe('admin');
@@ -23,7 +23,7 @@ describe('Finance Dashboard API', () => {
   });
 
   test('Viewer login works', async () => {
-    const res = await request(app).post('/auth/login').send({ email: 'viewer@example.com', password: 'view123' });
+    const res = await request(app).post('/api/auth/login').send({ email: 'viewer@example.com', password: 'view123' });
     expect(res.statusCode).toBe(200);
     expect(res.body.token).toBeDefined();
     viewerToken = res.body.token;
@@ -31,7 +31,7 @@ describe('Finance Dashboard API', () => {
 
   test('Admin can create financial record', async () => {
     const res = await request(app)
-      .post('/records')
+      .post('/api/records')
       .set('Authorization', `Bearer ${adminToken}`)
       .send({ amount: 120, type: 'income', category: 'sales', date: '2026-04-01', notes: 'test set' });
     expect(res.statusCode).toBe(201);
@@ -41,14 +41,14 @@ describe('Finance Dashboard API', () => {
 
   test('Viewer cannot create financial record', async () => {
     const res = await request(app)
-      .post('/records')
+      .post('/api/records')
       .set('Authorization', `Bearer ${viewerToken}`)
       .send({ amount: 42, type: 'expense', category: 'food', date: '2026-04-01', notes: 'test blocked' });
     expect(res.statusCode).toBe(403);
   });
 
   test('Summary overview contains totals and net', async () => {
-    const res = await request(app).get('/summary/overview').set('Authorization', `Bearer ${adminToken}`);
+    const res = await request(app).get('/api/summary/overview').set('Authorization', `Bearer ${adminToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('income');
     expect(res.body).toHaveProperty('expense');
